@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<opackage>
+	<name>Stripe Plugin</name>
+	<base>
+	</base>
+	<outputs>
+		<output type="zip" path="" filename="plg_hikashoppayment_stripe" />
+	</outputs>
+	<dictionnary>
+		<entry name="{__VERSION__}" value="1.0.0" />
+		<entry name="{__YEAR__}" date="yyyy" />
+		<entry name="{__MONTH__}" date="mm" />
+		<entry name="{__DAY__}" date="dd" />
+		<entry name="{__BUILD_NB__}" date="yyMMddHHmm" />
+	</dictionnary>
+	<files>
+		<file name="stripe.php">
+			<rule type="*" action="sourcecode" param="replace;commentary;header:header.txt;" />
+		</file>
+		<file name="stripe_end.php">
+			<rule type="*" action="sourcecode" param="replace;commentary;header:header.txt;" />
+		</file>
+		<file name="stripe.xml">
+			<rule type="*" action="sourcecode" param="replace" />
+		</file>
+		<directory name="lib\" filter="*.*" subDirs="true">
+			<rules>
+				<rule type="directory" action="addfile" param="index.html" />
+				<rule type="*.php" action="sourcecode" param="replace;commentary;header:header_namespace.txt;" />
+			</rules>
+		</directory>
+	</files>
+	<excludes>
+		<exclude name="*.bak" />
+		<exclude name="*.zip" />
+	</excludes>
+</opackage>
