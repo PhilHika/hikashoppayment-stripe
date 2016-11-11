@@ -2,6 +2,9 @@
 
 Stripe payment plugin for HikaShop (open source e-commerce solution for Joomla).
 
+## Documentation
+The documentation is available here: https://www.hikashop.com/support/support/documentation/251
+
 ## Requirements
 - PHP 5.3.3 and later.
 - HikaShop 2.6.3 and later.
