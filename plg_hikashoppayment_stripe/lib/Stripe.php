@@ -92,4 +92,5 @@ class StripeBridge {
 	public static function setApiKey($data) { return \Stripe\Stripe::setApiKey($data); }
 	public static function setApiVersion($data) { return \Stripe\Strip::setApiVersion($data); }
 	public static function Charge_create($data) { return \Stripe\Charge::create($data); }
+	public static function Customer_create($data) { return \Stripe\Customer::create($data); }
 }
