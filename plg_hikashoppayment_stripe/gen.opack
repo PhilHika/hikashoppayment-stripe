@@ -7,7 +7,7 @@
 		<output type="zip" path="" filename="plg_hikashoppayment_stripe" />
 	</outputs>
 	<dictionnary>
-		<entry name="{__VERSION__}" value="1.0.0" />
+		<entry name="{__VERSION__}" value="1.0.1" />
 		<entry name="{__YEAR__}" date="yyyy" />
 		<entry name="{__MONTH__}" date="mm" />
 		<entry name="{__DAY__}" date="dd" />
