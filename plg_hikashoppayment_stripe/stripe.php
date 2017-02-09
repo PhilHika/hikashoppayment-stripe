@@ -142,11 +142,22 @@ class plgHikashoppaymentStripe extends hikashopPaymentPlugin
 		$token = $_POST['stripeToken'];
 
 		try {
+			if(empty($this->user->user_params->stripe_customer_id)){
+				$customer = StripeBridge::Customer_create(array(
+				  "email" => $this->user->user_email,
+				  "source" => $token,
+				));
+				$this->user->user_params->stripe_customer_id = $customer->id;
+				$userClass = hikashop_get('class.user');
+				$userClass->save($this->user);
+			}
+
 			$charge = StripeBridge::Charge_create(array(
 				'amount' => $amout, // amount in cents, again
 				'currency' => $currency,
 				'card' => $token,
-				'description' => $desc
+				'description' => $desc,
+				'customer' => $this->user->user_params->stripe_customer_id
 			));
 		}
 		catch(Exception $e)
