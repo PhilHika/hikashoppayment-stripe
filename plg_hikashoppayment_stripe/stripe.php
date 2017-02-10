@@ -160,7 +160,6 @@ class plgHikashoppaymentStripe extends hikashopPaymentPlugin
 			$charge = StripeBridge::Charge_create(array(
 				'amount' => $amout, // amount in cents, again
 				'currency' => $currency,
-				'card' => $token,
 				'description' => $desc,
 				'customer' => $this->user->user_params->stripe_customer_id
 			));
