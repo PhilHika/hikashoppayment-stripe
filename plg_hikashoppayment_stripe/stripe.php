@@ -141,13 +141,17 @@ class plgHikashoppaymentStripe extends hikashopPaymentPlugin
 		// StripeBridge::setApiVersion('2013-12-03');
 		$token = $_POST['stripeToken'];
 
+		$stripe_customer_id = !empty($this->user->user_params->stripe_customer_id) ? $this->user->user_params->stripe_customer_id : null;
+		
 		try {
-			if(empty($this->user->user_params->stripe_customer_id)) {
+			if(empty($stripe_customer_id)) {
+				// Create the customer in Stripe
 				$customer = StripeBridge::Customer_create(array(
 					'email' => $this->user->user_email,
 					'source' => $token,
 				));
 				
+				// Store the Stripe Customer ID in HikaShop
 				$user = new stdClass();
 				$user->user_id = $this->user->user_id;
 				$user->user_params = $this->user->user_params;
@@ -155,18 +159,23 @@ class plgHikashoppaymentStripe extends hikashopPaymentPlugin
 				
 				$userClass = hikashop_get('class.user');
 				$userClass->save($user);
-			}else{
-				$customer = StripeBridge::Customer_retrieve($this->user->user_params->stripe_customer_id);
+				
+				// 
+				$stripe_customer_id = $customer->id;
+			} else {
+				$customer = StripeBridge::Customer_retrieve($stripe_customer_id);
+				// Create a new card for the customer
 				$card = $customer->sources->create(array('source' => $token));
 				$customer->default_source = $card->id;
 				$customer->save();
 			}
 
+			// Make the charge
 			$charge = StripeBridge::Charge_create(array(
 				'amount' => $amout, // amount in cents, again
 				'currency' => $currency,
 				'description' => $desc,
-				'customer' => $this->user->user_params->stripe_customer_id
+				'customer' => $stripe_customer_id
 			));
 		}
 		catch(Exception $e)
