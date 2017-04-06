@@ -126,6 +126,12 @@ class plgHikashoppaymentStripe extends hikashopPaymentPlugin
 			echo 'The system can\'t load the payment params';
 			return false;
 		}
+		// Avoid processing error on payed order :
+		if (!isset($_POST['stripeToken'])) {
+			
+			echo 'Token is missing, possible to finish this order';
+			return false;
+		}
 		$this->loadOrderData($dbOrder);
 
 		$return_url = HIKASHOP_LIVE.'index.php?option=com_hikashop&ctrl=checkout&task=after_end&order_id='.$order_id.$this->url_itemid;
