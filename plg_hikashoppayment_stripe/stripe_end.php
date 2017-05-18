@@ -61,7 +61,7 @@ $doc->addScriptDeclaration($js);
 			<tbody style="display:block; padding:10px;">
 			<tr style="margin-bottom:5px;">
 				<td style="text-align:right"><label><?php echo JText::_('CREDIT_CARD_NUMBER').' : '; ?></label></td>
-				<td><input style="text-align: center;" value="" autocomplete="off" type="text" size="20" data-stripe="number"></td>
+				<td><input onchange="if(!Stripe.card.validateCardNumber(this.value)) alert('<?php echo JText::_('CREDIT_CARD_INVALID', true); ?>');" style="text-align: center;" value="" autocomplete="off" type="text" size="20" data-stripe="number"></td>
 			</tr>
 			<tr style="margin-bottom:5px;">
 				<td style="text-align:right"><label><?php
@@ -81,6 +81,11 @@ $doc->addScriptDeclaration($js);
 			</tr>
 			</tbody>
 		</table>
+		<?php
+			foreach($this->vars as $name => $value ) {
+				echo '<input type="hidden" name="'.$name.'" data-stripe="'.$name.'" value="'.htmlspecialchars((string)$value).'" />';
+			}
+		?>
 	</form>
 </div>
 </fieldset>

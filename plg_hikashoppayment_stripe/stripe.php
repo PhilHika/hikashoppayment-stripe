@@ -88,6 +88,35 @@ class plgHikashoppaymentStripe extends hikashopPaymentPlugin
 		if(!$this->init())
 			return false;
 		parent::onAfterOrderConfirm($order, $methods, $method_id);
+		
+		$vars = array();
+		$address1 = '';
+		$address2 = '';
+
+		if(!empty($order->cart->billing_address->address_street2))
+			$address2 = substr($order->cart->billing_address->address_street2, 0, 99);
+
+		if(!empty($order->cart->billing_address->address_street)) {
+			if(strlen($order->cart->billing_address->address_street) > 100) {
+				$address1 = substr($order->cart->billing_address->address_street, 0, 99);
+				if(empty($address2))
+					$address2 = substr($order->cart->billing_address->address_street, 99, 199);
+			} else {
+				$address1 = $order->cart->billing_address->address_street;
+			}
+		}
+
+		$vars['address_line1'] = $address1;
+		$vars['address_line2'] = $address2;
+		$vars['address_zip'] = @$order->cart->billing_address->address_post_code;
+		$vars['address_city'] = @$order->cart->billing_address->address_city;
+		if((!isset($order->cart->billing_address->address_state->zone_code_3) || is_numeric($order->cart->billing_address->address_state->zone_code_3)) && !empty($order->cart->billing_address->address_country->zone_name)){
+			$vars['address_state'] = @$order->cart->billing_address->address_state->zone_name;
+		}else{
+			$vars['address_state'] = @$order->cart->billing_address->address_state->zone_code_3;
+		}
+		$vars['address_country'] = @$order->cart->billing_address->address_country->zone_code_2;
+		$this->vars = $vars;
 
 		$this->notifyurl = HIKASHOP_LIVE.'index.php?option=com_hikashop&ctrl=checkout&task=notify&notif_payment='.$this->name.'&tmpl=component&orderid='.$order->order_id;
 		$this->order =& $order;
