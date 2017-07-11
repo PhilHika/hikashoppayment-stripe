@@ -143,6 +143,10 @@ class plgHikashoppaymentStripe extends hikashopPaymentPlugin
 	 */
 	public function onPaymentNotification(&$statuses)
 	{
+		
+		// Notification check :
+		if (!empty($_POST)) $this->writeToLog($_POST);
+		
 		if(!$this->init())
 			return false;
 
@@ -152,7 +156,7 @@ class plgHikashoppaymentStripe extends hikashopPaymentPlugin
 		$this->loadPaymentParams($dbOrder);
 		if(empty($this->payment_params))
 		{
-			echo 'The system can\'t load the payment params';
+			$this->writeToLog('The system can\'t load the payment params');
 			return false;
 		}
 		$this->loadOrderData($dbOrder);
@@ -220,6 +224,7 @@ class plgHikashoppaymentStripe extends hikashopPaymentPlugin
 		{
 			$this->modifyOrder($order_id, $this->payment_params->invalid_status, true, true);
 			$this->app->redirect($cancel_url, 'Error charge : '.$e->getMessage());
+			$this->writeToLog($e->getMessage());
 			return false;
 		}
 
