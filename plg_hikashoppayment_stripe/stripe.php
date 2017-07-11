@@ -142,7 +142,7 @@ class plgHikashoppaymentStripe extends hikashopPaymentPlugin
 	 *
 	 */
 	public function onPaymentNotification(&$statuses)
-	{		
+	{
 		if(!$this->init())
 			return false;
 
